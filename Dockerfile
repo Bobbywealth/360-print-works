@@ -49,4 +49,4 @@ ENV PORT=10000
 EXPOSE 10000
 
 # Initialize database and start (with reduced memory for prisma)
-CMD ["sh", "-c", "NODE_OPTIONS='--max-old-space-size=128' bunx prisma db push || true && bun .next/standalone/server.js"]
+CMD ["sh", "-c", "NODE_OPTIONS='--max-old-space-size=128' bunx prisma db push || true && bun ./server.js"]
