@@ -1,0 +1,172 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Lead - potential customers before conversion
+model Lead {
+  id        String   @id @default(cuid())
+  name      String
+  company   String?
+  email     String
+  phone     String?
+  status    String   @default("New") // New, Contacted, Qualified, Converted
+  source    String?  // Website, Referral, Social Media, Cold Call, Other
+  notes     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  
+  // Relations
+  client    Client?
+  activities Activity[] @relation("LeadActivities")
+}
+
+// Client - converted leads, actual customers
+model Client {
+  id           String   @id @default(cuid())
+  name         String
+  company      String?
+  email        String   @unique
+  phone        String?
+  address      String?
+  city         String?
+  state        String?
+  zipCode      String?
+  totalSpent   Float    @default(0)
+  status       String   @default("Active") // Active, Inactive
+  leadId       String?  @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  
+  // Relations
+  lead         Lead?    @relation(fields: [leadId], references: [id])
+  projects     Project[]
+  invoices     Invoice[]
+  activities   Activity[] @relation("ClientActivities")
+}
+
+// Project - printing projects
+model Project {
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  type        String   // Business Cards, Brochures, Banners, etc.
+  status      String   @default("Pending") // Pending, In Progress, Completed, Cancelled
+  stage       String   @default("Design") // Design, Proof, Production, Delivery
+  amount      Float    @default(0)
+  dueDate     DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id])
+  documents   Document[]
+  activities  Activity[] @relation("ProjectActivities")
+}
+
+// Invoice - billing
+model Invoice {
+  id          String   @id @default(cuid())
+  invoiceNo   String   @unique
+  clientId    String
+  client      Client   @relation(fields: [clientId], references: [id])
+  status      String   @default("Draft") // Draft, Sent, Paid, Overdue
+  subtotal    Float    @default(0)
+  tax         Float    @default(0)
+  total       Float    @default(0)
+  issueDate   DateTime @default(now())
+  dueDate     DateTime
+  notes       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  items       InvoiceItem[]
+}
+
+// InvoiceItem - line items for invoices
+model InvoiceItem {
+  id          String   @id @default(cuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  description String
+  quantity    Int      @default(1)
+  unitPrice   Float    @default(0)
+  total       Float    @default(0)
+}
+
+// MarketingCampaign - email/SMS campaigns
+model MarketingCampaign {
+  id          String   @id @default(cuid())
+  name        String
+  type        String   // Email, SMS
+  status      String   @default("Draft") // Draft, Scheduled, Sent, Cancelled
+  subject     String?
+  content     String
+  recipients  Int      @default(0)
+  sentAt      DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Document - file uploads
+model Document {
+  id          String   @id @default(cuid())
+  name        String
+  category    String   // Designs, Proofs, Contracts, Invoices, Other
+  filePath    String
+  fileSize    Float    // in KB
+  fileType    String
+  projectId   String?
+  project     Project? @relation(fields: [projectId], references: [id])
+  createdAt   DateTime @default(now())
+}
+
+// Activity - activity log
+model Activity {
+  id          String   @id @default(cuid())
+  type        String   // Lead, Client, Project, Invoice, Document
+  action      String   // Created, Updated, Deleted, Converted, Status Changed
+  description String
+  entityId    String
+  
+  // Relations
+  leadId      String?
+  lead        Lead?    @relation("LeadActivities", fields: [leadId], references: [id])
+  clientId    String?
+  client      Client?  @relation("ClientActivities", fields: [clientId], references: [id])
+  projectId   String?
+  project     Project? @relation("ProjectActivities", fields: [projectId], references: [id])
+  
+  createdAt   DateTime @default(now())
+}
+
+// Settings - company settings
+model Settings {
+  id          String   @id @default(cuid())
+  key         String   @unique
+  value       String
+  updatedAt   DateTime @updatedAt
+}
+
+// QuoteRequest - from landing page
+model QuoteRequest {
+  id          String   @id @default(cuid())
+  name        String
+  email       String
+  phone       String?
+  company     String?
+  serviceType String?
+  description String?
+  filePath    String?  // uploaded file path
+  status      String   @default("New") // New, Contacted, Converted
+  createdAt   DateTime @default(now())
+}
