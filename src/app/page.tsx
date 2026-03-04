@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -44,8 +44,17 @@ import {
 // Header Component
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [currentWord, setCurrentWord] = useState(0)
+  const rotatingWords = ["Business", "Organizations", "Parties", "Events", "Brands", "Teams"]
   const { user, logout } = useAuth()
   const router = useRouter()
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentWord((prev) => (prev + 1) % rotatingWords.length)
+    }, 2000)
+    return () => clearInterval(interval)
+  }, [])
 
   const handleLogout = () => {
     logout()
@@ -162,7 +171,11 @@ function HeroSection() {
             </div>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
               Complete Printing Solutions for Your{' '}
-              <span className="text-blue-600">Business</span>
+              <span className="text-blue-600 inline-block min-w-[180px]">
+                <span key={currentWord} className="animate-fade-in inline-block">
+                  {rotatingWords[currentWord]}
+                </span>
+              </span>
             </h1>
             <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-xl">
               From business cards to large format printing, we deliver premium quality prints with fast turnaround times. Your success is our priority.
