@@ -41,11 +41,12 @@ import {
   LogOut
 } from "lucide-react"
 
+const rotatingWords = ["Business", "Organizations", "Parties", "Events", "Brands", "Teams"]
+
 // Header Component
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [currentWord, setCurrentWord] = useState(0)
-  const rotatingWords = ["Business", "Organizations", "Parties", "Events", "Brands", "Teams"]
   const { user, logout } = useAuth()
   const router = useRouter()
 
