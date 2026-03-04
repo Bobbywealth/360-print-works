@@ -493,7 +493,7 @@ function Footer() {
         <div className="grid md:grid-cols-4 gap-8 mb-12">
           <div className="md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
-              <img src="/logo.webp" alt="360 Print Works" className="h-10 w-auto brightness-0 invert" />
+              <img src="/logo.webp" alt="360 Print Works" className="w-[200px] h-auto" />
             </div>
             <p className="text-gray-400 mb-6">Complete printing solutions for businesses of all sizes. Quality guaranteed.</p>
             <div className="flex gap-4">
