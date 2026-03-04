@@ -48,5 +48,5 @@ ENV PORT=10000
 # Use PORT from environment variable (Render sets this)
 EXPOSE 10000
 
-# Initialize database and start (with reduced memory for prisma)
-CMD ["sh", "-c", "NODE_OPTIONS='--max-old-space-size=128' bunx prisma db push || true && bun ./server.js"]
+# Start the server
+CMD ["bun", "./server.js"]
