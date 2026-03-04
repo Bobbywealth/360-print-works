@@ -11,6 +11,19 @@ const config: Config = {
   theme: {
   	extend: {
   		colors: {
+  			blue: {
+  				'50':  '#e3f6fd',
+  				'100': '#bce9fb',
+  				'200': '#8ed9f9',
+  				'300': '#5dc8f6',
+  				'400': '#38bbf2',
+  				'500': '#1DADEF',
+  				'600': '#1DADEF',
+  				'700': '#1592ca',
+  				'800': '#0e73a1',
+  				'900': '#085577',
+  				'950': '#043a53',
+  			},
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {
