@@ -46,13 +46,18 @@ const rotatingWords = ["Business", "Organizations", "Parties", "Events", "Brands
 // Header Component
 function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [currentWord, setCurrentWord] = useState(0)
+  const [currentWord, setCurrentWord] = useState('Business')
+  const [isMounted, setIsMounted] = useState(false)
   const { user, logout } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
+    setIsMounted(true)
     const interval = setInterval(() => {
-      setCurrentWord((prev) => (prev + 1) % rotatingWords.length)
+      setCurrentWord((prev) => {
+        const currentIndex = rotatingWords.indexOf(prev)
+        return rotatingWords[(currentIndex + 1) % rotatingWords.length]
+      })
     }, 2000)
     return () => clearInterval(interval)
   }, [])
@@ -174,7 +179,7 @@ function HeroSection() {
               Complete Printing Solutions for Your{' '}
               <span className="text-blue-600 inline-block min-w-[180px]">
                 <span key={currentWord} className="animate-fade-in inline-block">
-                  {rotatingWords[currentWord]}
+                  {currentWord}
                 </span>
               </span>
             </h1>
