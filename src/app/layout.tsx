@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   keywords: ["printing", "business cards", "brochures", "banners", "signage", "custom merchandise", "360 Print Works"],
   authors: [{ name: "360 Print Works" }],
   icons: {
-    icon: "/logo.png",
+    icon: "/logo.webp",
   },
   openGraph: {
     title: "360 Print Works - Complete Printing Solutions",
