@@ -216,25 +216,8 @@ function HeroSection() {
           {/* Hero Image/Illustration */}
           <div className="relative hidden md:block">
             <div className="absolute inset-0 bg-gradient-to-r from-blue-400 to-blue-600 rounded-3xl transform rotate-3" />
-            <div className="relative bg-white rounded-3xl p-8 shadow-2xl">
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-blue-50 rounded-2xl p-6 flex flex-col items-center justify-center">
-                  <CreditCard className="h-12 w-12 text-blue-600 mb-3" />
-                  <span className="text-sm font-medium text-gray-700">Business Cards</span>
-                </div>
-                <div className="bg-green-50 rounded-2xl p-6 flex flex-col items-center justify-center">
-                  <FileText className="h-12 w-12 text-green-600 mb-3" />
-                  <span className="text-sm font-medium text-gray-700">Brochures</span>
-                </div>
-                <div className="bg-purple-50 rounded-2xl p-6 flex flex-col items-center justify-center">
-                  <ImageIcon className="h-12 w-12 text-purple-600 mb-3" />
-                  <span className="text-sm font-medium text-gray-700">Banners</span>
-                </div>
-                <div className="bg-orange-50 rounded-2xl p-6 flex flex-col items-center justify-center">
-                  <Shirt className="h-12 w-12 text-orange-600 mb-3" />
-                  <span className="text-sm font-medium text-gray-700">Merchandise</span>
-                </div>
-              </div>
+            <div className="relative bg-white rounded-3xl p-4 shadow-2xl">
+              <img src="/hero.webp" alt="360 Print Works Services" className="w-full h-auto rounded-2xl" />
             </div>
           </div>
         </div>
