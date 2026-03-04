@@ -67,7 +67,7 @@ function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <a href="/" className="flex items-center gap-3">
-            <img src="/logo.webp" alt="360 Print Works" className="h-10 w-auto" />
+            <img src="/logo.webp" alt="360 Print Works" className="w-[200px] h-auto" />
           </a>
           
           {/* Desktop Navigation */}
