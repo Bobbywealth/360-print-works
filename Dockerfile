@@ -49,4 +49,4 @@ ENV PORT=10000
 EXPOSE 10000
 
 # Initialize database and start
-CMD ["sh", "-c", "bun prisma db push && bun server.js"]
+CMD ["sh", "-c", "bunx prisma db push && bun .next/standalone/server.js"]
