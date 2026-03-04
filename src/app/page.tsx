@@ -241,29 +241,47 @@ const services = [
 
 function ServicesSection() {
   return (
-    <section id="services" className="py-20 bg-gray-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <section id="services" className="py-20 relative overflow-hidden">
+      {/* Background pattern */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(79,141,253,0.08),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(79,141,253,0.05),transparent_40%)]" />
+      
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Our Printing Services</h2>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">We offer a comprehensive range of printing solutions to meet all your business needs.</p>
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Professional Printing Services</h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">High-quality printing solutions for brands, businesses, and events</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {services.map((service, index) => {
             const Icon = service.icon
             return (
-              <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-0 bg-white">
-                <CardHeader>
-                  <div className="h-14 w-14 bg-blue-100 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-600 transition-colors">
-                    <Icon className="h-7 w-7 text-blue-600 group-hover:text-white transition-colors" />
+              <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm">
+                <CardHeader className="p-6">
+                  <div className="h-14 w-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
+                    <Icon className="h-7 w-7 text-white" />
                   </div>
                   <CardTitle className="text-xl">{service.title}</CardTitle>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="p-6 pt-0">
                   <CardDescription className="text-gray-600">{service.description}</CardDescription>
                 </CardContent>
               </Card>
             )
           })}
+        </div>
+        
+        {/* CTA Row */}
+        <div className="mt-12 text-center">
+          <p className="text-gray-600 mb-6">Need help choosing the right print solution?</p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8">
+              Get a Quote
+              <ChevronRight className="ml-2 h-5 w-5" />
+            </Button>
+            <Button size="lg" variant="outline" className="text-lg px-8">
+              Talk to a Specialist
+            </Button>
+          </div>
         </div>
       </div>
     </section>
