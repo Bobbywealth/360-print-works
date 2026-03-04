@@ -514,9 +514,20 @@ function Footer() {
           <div>
             <h3 className="text-white font-semibold mb-4">Contact</h3>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-blue-400" />(555) 123-4567</li>
-              <li className="flex items-center gap-2"><Mail className="h-4 w-4 text-blue-400" />info@360printworks.com</li>
-              <li className="flex items-start gap-2"><MapPin className="h-4 w-4 text-blue-400 mt-1" /><span>123 Print Street<br />Design City, DC 12345</span></li>
+              <li className="flex items-center gap-2"><Phone className="h-4 w-4 text-blue-400" />(862) 930-3581</li>
+              <li className="flex items-start gap-2"><MapPin className="h-4 w-4 text-blue-400 mt-1" /><span>325 Elmwood Ave<br />East Orange, NJ 07018</span></li>
+              <li className="mt-4">
+                <h4 className="text-white font-medium mb-2">Hours:</h4>
+                <div className="text-gray-400 text-sm space-y-1">
+                  <div className="flex justify-between"><span>Mon:</span><span>10 AM – 6 PM</span></div>
+                  <div className="flex justify-between"><span>Tue:</span><span>10 AM – 6 PM</span></div>
+                  <div className="flex justify-between"><span>Wed:</span><span>10 AM – 6 PM</span></div>
+                  <div className="flex justify-between"><span>Thu:</span><span>10 AM – 6 PM</span></div>
+                  <div className="flex justify-between"><span>Fri:</span><span>10 AM – 7 PM</span></div>
+                  <div className="flex justify-between"><span>Sat:</span><span>10 AM – 2 PM</span></div>
+                  <div className="flex justify-between"><span>Sun:</span><span>Closed</span></div>
+                </div>
+              </li>
             </ul>
           </div>
         </div>
