@@ -164,51 +164,53 @@ function HeroSection() {
 
   return (
     <section className="pt-24 pb-16 md:pt-32 md:pb-24 relative overflow-hidden">
-      {/* Background gradient */}
-      <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-blue-50" />
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyNTYzRUIiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-50" />
+      {/* Background image with overlay */}
+      <div className="absolute inset-0">
+        <img src="/hero.webp" alt="" className="w-full h-full object-cover" />
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-900/80 via-blue-800/70 to-blue-900/80" />
+      </div>
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid md:grid-cols-2 gap-12 items-center">
           <div className="text-center md:text-left">
-            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-600 px-4 py-2 rounded-full text-sm font-medium mb-6">
+            <div className="inline-flex items-center gap-2 bg-white/20 text-white px-4 py-2 rounded-full text-sm font-medium mb-6 backdrop-blur-sm">
               <Award className="h-4 w-4" />
               Trusted by 500+ Businesses
             </div>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
               Complete Printing Solutions for Your{' '}
-              <span className="text-blue-600 inline-block min-w-[180px]">
+              <span className="text-blue-300 inline-block min-w-[180px]">
                 <span key={currentWord} className="animate-fade-in inline-block">
                   {currentWord}
                 </span>
               </span>
             </h1>
-            <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-xl">
+            <p className="text-lg md:text-xl text-blue-100 mb-8 max-w-xl">
               From business cards to large format printing, we deliver premium quality prints with fast turnaround times. Your success is our priority.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8">
+              <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8">
                 Get a Quote
                 <ChevronRight className="ml-2 h-5 w-5" />
               </Button>
-              <Button size="lg" variant="outline" className="text-lg px-8">
+              <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 text-lg px-8">
                 View Our Services
               </Button>
             </div>
             
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-gray-200">
+            <div className="grid grid-cols-3 gap-6 mt-12 pt-8 border-t border-white/20">
               <div className="text-center md:text-left">
-                <div className="text-3xl font-bold text-blue-600">500+</div>
-                <div className="text-sm text-gray-500">Happy Clients</div>
+                <div className="text-3xl font-bold text-white">500+</div>
+                <div className="text-sm text-blue-200">Happy Clients</div>
               </div>
               <div className="text-center md:text-left">
-                <div className="text-3xl font-bold text-blue-600">10K+</div>
-                <div className="text-sm text-gray-500">Projects Done</div>
+                <div className="text-3xl font-bold text-white">10K+</div>
+                <div className="text-sm text-blue-200">Projects Done</div>
               </div>
               <div className="text-center md:text-left">
-                <div className="text-3xl font-bold text-blue-600">15+</div>
-                <div className="text-sm text-gray-500">Years Experience</div>
+                <div className="text-3xl font-bold text-white">15+</div>
+                <div className="text-sm text-blue-200">Years Experience</div>
               </div>
             </div>
           </div>
