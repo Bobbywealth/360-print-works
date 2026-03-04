@@ -7,6 +7,15 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   reactStrictMode: false,
+  // Memory optimization for builds
+  swcMinify: true,
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  // Reduce bundle size by optimizing images
+  images: {
+    formats: ["image/avif", "image/webp"],
+  },
 };
 
 export default nextConfig;
