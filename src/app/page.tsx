@@ -564,7 +564,7 @@ function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-gray-400 text-sm">© 2024 360 Print Works. All rights reserved.</p>
+          <p className="text-gray-400 text-sm">© 2026 360 Print Works. All rights reserved.</p>
           <div className="flex gap-6 text-sm">
             <a href="#" className="hover:text-blue-400 transition-colors">Privacy Policy</a>
             <a href="#" className="hover:text-blue-400 transition-colors">Terms of Service</a>
