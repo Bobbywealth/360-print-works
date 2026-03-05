@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -16,11 +16,12 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { toast } from "@/hooks/use-toast"
 import { useAuth } from "@/contexts/AuthContext"
-import { 
+import {
   LayoutDashboard, Users, UserPlus, FolderKanban, FileText, Mail, MessageSquare, Upload, Settings,
   ChevronDown, Plus, Search, MoreHorizontal, Eye, Edit, Trash2, Send, Download, ArrowRight,
   DollarSign, TrendingUp, Clock, CheckCircle2, AlertCircle, FileCheck, Printer, BarChart3,
-  Home, Bell, LogOut, Building, Phone, Mail as MailIcon, Calendar, Tag, Paperclip, Calculator
+  Home, Bell, LogOut, Building, Phone, Mail as MailIcon, Calendar, Tag, Paperclip, Calculator,
+  Package, CheckSquare, Monitor, Landmark
 } from "lucide-react"
 
 interface Lead { id: string; name: string; email: string; company: string | null; phone: string | null; status: string; source: string | null; notes: string | null; createdAt: string }
@@ -31,42 +32,75 @@ interface Campaign { id: string; name: string; type: string; status: string; sub
 interface Document { id: string; name: string; category: string; fileSize: number; fileType: string; createdAt: string; project: { name: string } | null }
 interface DashboardData { counts: { clients: number; leads: number; projects: number; invoices: number; activeProjects: number; pendingInvoices: number }; revenue: { monthly: number; total: number }; activities: { id: string; type: string; action: string; description: string; createdAt: string }[]; monthlyData: { month: string; revenue: number }[] }
 
-function Sidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
-  const menuItems = [
-    { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'pricing', label: 'Pricing Calculator', icon: Calculator },
-    { id: 'leads', label: 'Leads', icon: UserPlus },
-    { id: 'clients', label: 'Clients', icon: Users },
-    { id: 'projects', label: 'Projects', icon: FolderKanban },
-    { id: 'invoices', label: 'Invoices', icon: FileText },
-    { id: 'marketing', label: 'Marketing', icon: Mail },
-    { id: 'documents', label: 'Documents', icon: Upload },
-    { id: 'settings', label: 'Settings', icon: Settings },
+function Sidebar({ activeTab, setActiveTab, inquiryCount }: { activeTab: string; setActiveTab: (tab: string) => void; inquiryCount?: number }) {
+  const sections = [
+    {
+      label: 'GENERAL',
+      items: [
+        { id: 'dashboard', label: 'Getting Started', icon: CheckCircle2 },
+        { id: 'calendar', label: 'Calendar', icon: Calendar },
+        { id: 'pricing', label: 'Quotes', icon: Calculator },
+        { id: 'invoices', label: 'Invoices', icon: FileText },
+        { id: 'clients', label: 'Customers', icon: Users },
+        { id: 'projects', label: 'Manage Goods', icon: Package },
+      ],
+    },
+    {
+      label: 'EXTRAS',
+      items: [
+        { id: 'marketing', label: 'Messages', icon: MessageSquare },
+        { id: 'tasks', label: 'Tasks', icon: CheckSquare },
+        { id: 'leads', label: 'Inquiries', icon: Monitor, badge: inquiryCount },
+      ],
+    },
+    {
+      label: 'FINANCIALS',
+      items: [
+        { id: 'payments', label: 'Payments', icon: DollarSign },
+        { id: 'expenses', label: 'Expenses', icon: Tag },
+        { id: 'analytics', label: 'Analytics', icon: BarChart3 },
+        { id: 'deposits', label: 'Deposits', icon: Landmark },
+      ],
+    },
   ]
+
   return (
-    <aside className="w-64 bg-slate-900 text-white min-h-screen flex flex-col">
-      <div className="p-6 border-b border-slate-700">
+    <aside className="w-64 bg-white border-r border-gray-200 min-h-screen flex flex-col">
+      <div className="p-6 border-b border-gray-200">
         <a href="/" className="flex items-center gap-3">
-          <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg">360</div>
-          <div><div className="font-bold">Print Works</div><div className="text-xs text-slate-400">CRM Dashboard</div></div>
+          <div className="h-10 w-10 bg-blue-600 rounded-lg flex items-center justify-center font-bold text-lg text-white">360</div>
+          <div><div className="font-bold text-gray-900">Print Works</div><div className="text-xs text-gray-500">CRM Dashboard</div></div>
         </a>
       </div>
-      <nav className="flex-1 p-4">
-        <ul className="space-y-1">
-          {menuItems.map((item) => {
-            const Icon = item.icon
-            return (
-              <li key={item.id}>
-                <button onClick={() => setActiveTab(item.id)} className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${activeTab === item.id ? 'bg-blue-600 text-white' : 'text-slate-300 hover:bg-slate-800'}`}>
-                  <Icon className="h-5 w-5" />{item.label}
-                </button>
-              </li>
-            )
-          })}
-        </ul>
+      <nav className="flex-1 p-4 space-y-6 overflow-y-auto">
+        {sections.map((section) => (
+          <div key={section.label}>
+            <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-2">{section.label}</p>
+            <ul className="space-y-0.5">
+              {section.items.map((item) => {
+                const Icon = item.icon
+                const isActive = activeTab === item.id
+                return (
+                  <li key={item.id}>
+                    <button
+                      onClick={() => setActiveTab(item.id)}
+                      className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors ${isActive ? 'bg-green-50 text-green-700 font-medium' : 'text-gray-600 hover:bg-gray-100'}`}
+                    >
+                      <Icon className={`h-4 w-4 flex-shrink-0 ${isActive ? 'text-green-600' : 'text-gray-400'}`} />
+                      <span className="flex-1 text-left">{item.label}</span>
+                      {item.badge != null && item.badge > 0 && (
+                        <span className="bg-blue-500 text-white text-xs rounded-full px-1.5 py-0.5 leading-none">{item.badge}</span>
+                      )}
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        ))}
       </nav>
-      <div className="p-4 border-t border-slate-700">
-        <Button variant="outline" className="w-full justify-start gap-2 bg-transparent border-slate-700 text-slate-300 hover:bg-slate-800" asChild>
+      <div className="p-4 border-t border-gray-200">
+        <Button variant="outline" className="w-full justify-start gap-2" asChild>
           <a href="/"><Home className="h-4 w-4" />Back to Website</a>
         </Button>
       </div>
@@ -582,6 +616,16 @@ function SettingsPanel() {
   )
 }
 
+function ComingSoonPanel({ title, icon: Icon }: { title: string; icon: React.ElementType }) {
+  return (
+    <div className="flex flex-col items-center justify-center h-96 text-center p-6">
+      <Icon className="h-16 w-16 text-gray-300 mb-4" />
+      <h2 className="text-2xl font-bold text-gray-700 mb-2">{title}</h2>
+      <p className="text-gray-400">This section is coming soon.</p>
+    </div>
+  )
+}
+
 export default function CRMPage() {
   const { user, logout, isLoading: authLoading } = useAuth()
   const router = useRouter()
@@ -631,13 +675,19 @@ export default function CRMPage() {
       case 'marketing': return <MarketingPanel campaigns={campaigns} refresh={fetchAll} />
       case 'documents': return <DocumentsPanel documents={documents} projects={projects} refresh={fetchAll} />
       case 'settings': return <SettingsPanel />
+      case 'calendar': return <ComingSoonPanel title="Calendar" icon={Calendar} />
+      case 'tasks': return <ComingSoonPanel title="Tasks" icon={CheckSquare} />
+      case 'payments': return <ComingSoonPanel title="Payments" icon={DollarSign} />
+      case 'expenses': return <ComingSoonPanel title="Expenses" icon={Tag} />
+      case 'analytics': return <ComingSoonPanel title="Analytics" icon={BarChart3} />
+      case 'deposits': return <ComingSoonPanel title="Deposits" icon={Landmark} />
       default: return <DashboardPanel data={dashboardData} />
     }
   }
 
   return (
     <div className="flex h-screen bg-gray-50">
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} inquiryCount={leads.length} />
       <div className="flex-1 flex flex-col overflow-hidden">
         <CRMHeader user={user} onLogout={handleLogout} />
         <main className="flex-1 overflow-auto">{renderContent()}</main>
