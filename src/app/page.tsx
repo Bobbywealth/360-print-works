@@ -38,6 +38,8 @@ import {
   TrendingUp,
   LayoutDashboard,
   LogIn,
+  ArrowRight,
+  Sparkles,
   LogOut
 } from "lucide-react"
 
@@ -240,29 +242,41 @@ const services = [
 
 function ServicesSection() {
   return (
-    <section id="services" className="py-20 relative overflow-hidden">
+    <section id="services" className="py-24 relative overflow-hidden">
       {/* Background pattern */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-gray-100" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(79,141,253,0.08),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(79,141,253,0.05),transparent_40%)]" />
+      <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-white to-slate-100" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.1),transparent_40%),radial-gradient(circle_at_80%_80%,rgba(59,130,246,0.06),transparent_40%)]" />
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Professional Printing Services</h2>
+          <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 px-4 py-1.5 rounded-full text-sm font-medium mb-4">
+            <Sparkles className="h-4 w-4" />
+            Our Services
+          </div>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Professional Printing Services</h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">High-quality printing solutions for brands, businesses, and events</p>
         </div>
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {services.map((service, index) => {
             const Icon = service.icon
             return (
-              <Card key={index} className="group hover:shadow-xl transition-all duration-300 hover:-translate-y-2 border-0 bg-white/80 backdrop-blur-sm">
-                <CardHeader className="p-6">
-                  <div className="h-14 w-14 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform shadow-lg shadow-blue-500/20">
-                    <Icon className="h-7 w-7 text-white" />
+              <Card key={index} className="group relative overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-3 border-0 bg-white/90 backdrop-blur-sm rounded-2xl">
+                {/* Gradient overlay on hover */}
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-600/0 via-blue-600/5 to-blue-600/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <CardHeader className="p-8 pb-4">
+                  <div className="relative">
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-400 to-blue-600 rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-500 transform group-hover:scale-110" />
+                    <div className="relative h-16 w-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mb-5 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-lg shadow-blue-500/25">
+                      <Icon className="h-8 w-8 text-white" />
+                    </div>
                   </div>
-                  <CardTitle className="text-xl">{service.title}</CardTitle>
+                  <CardTitle className="text-xl font-bold text-gray-900">{service.title}</CardTitle>
                 </CardHeader>
-                <CardContent className="p-6 pt-0">
-                  <CardDescription className="text-gray-600">{service.description}</CardDescription>
+                <CardContent className="p-8 pt-0">
+                  <CardDescription className="text-gray-500 text-base leading-relaxed">{service.description}</CardDescription>
+                  <div className="mt-4 flex items-center text-blue-600 font-medium text-sm opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-y-2 group-hover:translate-y-0">
+                    Learn more <ArrowRight className="ml-1 h-4 w-4" />
+                  </div>
                 </CardContent>
               </Card>
             )
@@ -270,14 +284,14 @@ function ServicesSection() {
         </div>
         
         {/* CTA Row */}
-        <div className="mt-12 text-center">
-          <p className="text-gray-600 mb-6">Need help choosing the right print solution?</p>
+        <div className="mt-16 text-center">
+          <p className="text-gray-600 mb-6 text-lg">Need help choosing the right print solution?</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8">
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 h-14 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300">
               Get a Quote
               <ChevronRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+            <Button size="lg" variant="outline" className="text-lg px-8 h-14 rounded-xl border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300">
               Talk to a Specialist
             </Button>
           </div>
