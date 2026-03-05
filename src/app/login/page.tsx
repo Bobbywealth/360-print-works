@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useAuth } from "@/contexts/AuthContext"
 import { toast } from "@/hooks/use-toast"
-import { Printer, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
+import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react"
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -48,10 +48,7 @@ export default function LoginPage() {
       <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-blue-600 to-blue-800 p-12 flex-col justify-between">
         <div>
           <div className="flex items-center gap-3">
-            <div className="h-12 w-12 bg-white rounded-xl flex items-center justify-center">
-              <Printer className="h-7 w-7 text-blue-600" />
-            </div>
-            <span className="text-2xl font-bold text-white">360 Print Works</span>
+            <img src="/logo.png" alt="360 Print Works" className="h-16 w-auto" />
           </div>
         </div>
 
@@ -93,10 +90,7 @@ export default function LoginPage() {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="h-10 w-10 bg-blue-600 rounded-xl flex items-center justify-center">
-              <Printer className="h-6 w-6 text-white" />
-            </div>
-            <span className="text-xl font-bold text-gray-900">360 Print Works</span>
+            <img src="/logo.png" alt="360 Print Works" className="h-12 w-auto" />
           </div>
 
           <Button 
