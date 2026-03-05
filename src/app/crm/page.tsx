@@ -20,7 +20,7 @@ import {
   LayoutDashboard, Users, UserPlus, FolderKanban, FileText, Mail, MessageSquare, Upload, Settings,
   ChevronDown, Plus, Search, MoreHorizontal, Eye, Edit, Trash2, Send, Download, ArrowRight,
   DollarSign, TrendingUp, Clock, CheckCircle2, AlertCircle, FileCheck, Printer, BarChart3,
-  Home, Bell, LogOut, Building, Phone, Mail as MailIcon, Calendar, Tag, Paperclip
+  Home, Bell, LogOut, Building, Phone, Mail as MailIcon, Calendar, Tag, Paperclip, Calculator
 } from "lucide-react"
 
 interface Lead { id: string; name: string; email: string; company: string | null; phone: string | null; status: string; source: string | null; notes: string | null; createdAt: string }
@@ -34,6 +34,7 @@ interface DashboardData { counts: { clients: number; leads: number; projects: nu
 function Sidebar({ activeTab, setActiveTab }: { activeTab: string; setActiveTab: (tab: string) => void }) {
   const menuItems = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+    { id: 'pricing', label: 'Pricing Calculator', icon: Calculator },
     { id: 'leads', label: 'Leads', icon: UserPlus },
     { id: 'clients', label: 'Clients', icon: Users },
     { id: 'projects', label: 'Projects', icon: FolderKanban },
@@ -97,6 +98,209 @@ function CRMHeader({ user, onLogout }: { user: { name: string; email: string; ro
         </DropdownMenu>
       </div>
     </header>
+  )
+}
+
+function PricingCalculatorPanel() {
+  const [serviceType, setServiceType] = useState('')
+  const [quantity, setQuantity] = useState(100)
+  const [paperType, setPaperType] = useState('standard')
+  const [colorType, setColorType] = useState('full')
+  const [finishing, setFinishing] = useState<string[]>([])
+  const [rushOrder, setRushOrder] = useState(false)
+
+  const servicePrices: Record<string, { base: number; unit: number }> = {
+    'business-cards': { base: 25, unit: 0.15 },
+    'brochures': { base: 30, unit: 0.25 },
+    'flyers': { base: 20, unit: 0.18 },
+    'banners': { base: 50, unit: 0.35 },
+    'posters': { base: 35, unit: 0.28 },
+    'business-stationery': { base: 40, unit: 0.22 },
+    'marketing-materials': { base: 45, unit: 0.30 },
+    'large-format': { base: 75, unit: 0.45 },
+  }
+
+  const paperTypes: Record<string, number> = {
+    'standard': 0,
+    'premium': 0.05,
+    'matte': 0.08,
+    'glossy': 0.08,
+    'cardstock': 0.12,
+  }
+
+  const colorTypes: Record<string, number> = {
+    'bw': 0,
+    'full': 0.10,
+  }
+
+  const finishingOptions: Record<string, number> = {
+    'lamination': 0.05,
+    'embossing': 0.08,
+    'foil-stamping': 0.12,
+    'die-cutting': 0.06,
+    'rounded-corners': 0.03,
+  }
+
+  const calculatePrice = () => {
+    if (!serviceType || !servicePrices[serviceType]) return 0
+    const base = servicePrices[serviceType]
+    let unitPrice = base.unit
+    unitPrice += unitPrice * paperTypes[paperType]
+    unitPrice += unitPrice * colorTypes[colorType]
+    finishing.forEach(f => { unitPrice += unitPrice * (finishingOptions[f] || 0) })
+    let total = base.base + (unitPrice * quantity)
+    if (rushOrder) total *= 1.25
+    return total
+  }
+
+  const formatCurrency = (amount: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount)
+
+  return (
+    <div className="p-8">
+      <div className="mb-8">
+        <h2 className="text-2xl font-bold text-gray-900">Pricing Calculator</h2>
+        <p className="text-gray-600">Calculate pricing for printing projects</p>
+      </div>
+
+      <div className="grid lg:grid-cols-2 gap-8">
+        <Card>
+          <CardHeader>
+            <CardTitle>Project Details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="space-y-2">
+              <Label>Service Type</Label>
+              <Select value={serviceType} onValueChange={setServiceType}>
+                <SelectTrigger><SelectValue placeholder="Select a service" /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="business-cards">Business Cards</SelectItem>
+                  <SelectItem value="brochures">Brochures</SelectItem>
+                  <SelectItem value="flyers">Flyers</SelectItem>
+                  <SelectItem value="banners">Banners</SelectItem>
+                  <SelectItem value="posters">Posters</SelectItem>
+                  <SelectItem value="business-stationery">Business Stationery</SelectItem>
+                  <SelectItem value="marketing-materials">Marketing Materials</SelectItem>
+                  <SelectItem value="large-format">Large Format Printing</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Quantity: {quantity}</Label>
+              <Input type="number" min="1" value={quantity} onChange={(e) => setQuantity(parseInt(e.target.value) || 1)} />
+            </div>
+
+            <div className="space-y-2">
+              <Label>Paper Type</Label>
+              <Select value={paperType} onValueChange={setPaperType}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="standard">Standard (80lb)</SelectItem>
+                  <SelectItem value="premium">Premium (100lb)</SelectItem>
+                  <SelectItem value="matte">Matte Finish</SelectItem>
+                  <SelectItem value="glossy">Glossy Finish</SelectItem>
+                  <SelectItem value="cardstock">Cardstock (14pt)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Color</Label>
+              <Select value={colorType} onValueChange={setColorType}>
+                <SelectTrigger><SelectValue /></SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="bw">Black & White</SelectItem>
+                  <SelectItem value="full">Full Color</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <Label>Finishing Options</Label>
+              <div className="grid grid-cols-2 gap-2">
+                {Object.keys(finishingOptions).map((option) => (
+                  <label key={option} className="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" checked={finishing.includes(option)} onChange={(e) => {
+                      if (e.target.checked) setFinishing([...finishing, option])
+                      else setFinishing(finishing.filter(f => f !== option))
+                    }} />
+                    <span className="text-sm capitalize">{option.replace('-', ' ')}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <input type="checkbox" id="rush" checked={rushOrder} onChange={(e) => setRushOrder(e.target.checked)} />
+              <Label htmlFor="rush" className="cursor-pointer">Rush Order (+25%)</Label>
+            </div>
+          </CardContent>
+        </Card>
+
+        <div className="space-y-6">
+          <Card className="bg-gradient-to-br from-blue-600 to-blue-800 text-white">
+            <CardHeader>
+              <CardTitle className="text-white">Price Estimate</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-4xl font-bold mb-2">{formatCurrency(calculatePrice())}</div>
+              <p className="text-blue-200 text-sm">Final price may vary based on specific requirements</p>
+              
+              <div className="mt-6 space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-blue-200">Base Fee:</span>
+                  <span>{serviceType ? formatCurrency(servicePrices[serviceType]?.base || 0) : '$0.00'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-blue-200">Unit Price:</span>
+                  <span>{serviceType ? formatCurrency((servicePrices[serviceType]?.unit || 0) * (1 + paperTypes[paperType] + colorTypes[colorType])) : '$0.00'}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-blue-200">Quantity:</span>
+                  <span>{quantity}</span>
+                </div>
+                {rushOrder && (
+                  <div className="flex justify-between text-orange-300">
+                    <span>Rush Order (+25%):</span>
+                    <span>+{formatCurrency(calculatePrice() * 0.25)}</span>
+                  </div>
+                )}
+              </div>
+
+              <Button className="w-full mt-6 bg-white text-blue-600 hover:bg-blue-50">
+                Create Quote from this Estimate
+              </Button>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle>Price Breakdown</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="text-gray-600">Service</span>
+                  <span className="font-medium">{serviceType ? serviceType.replace('-', ' ').replace(/\b\w/g, l => l.toUpperCase()) : 'Not selected'}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="text-gray-600">Paper</span>
+                  <span className="font-medium capitalize">{paperType}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="text-gray-600">Color</span>
+                  <span className="font-medium capitalize">{colorType === 'bw' ? 'Black & White' : 'Full Color'}</span>
+                </div>
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                  <span className="text-gray-600">Finishing</span>
+                  <span className="font-medium">{finishing.length > 0 ? finishing.map(f => f.replace('-', ' ')).join(', ') : 'None'}</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -419,6 +623,7 @@ export default function CRMPage() {
     if (loading) { return (<div className="flex items-center justify-center h-96"><div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div></div>) }
     switch (activeTab) {
       case 'dashboard': return <DashboardPanel data={dashboardData} />
+      case 'pricing': return <PricingCalculatorPanel />
       case 'leads': return <LeadsPanel leads={leads} refresh={fetchAll} />
       case 'clients': return <ClientsPanel clients={clients} refresh={fetchAll} />
       case 'projects': return <ProjectsPanel projects={projects} clients={clients} refresh={fetchAll} />
