@@ -604,9 +604,107 @@ function DocumentsPanel({ documents, projects, refresh }: { documents: Document[
 }
 
 function SettingsPanel() {
+  const [engineers, setEngineers] = useState([
+    { id: '1', name: 'John Smith', role: 'Senior Engineer', availability: { mon: true, tue: true, wed: true, thu: true, fri: true, sat: false, sun: false } },
+    { id: '2', name: 'Sarah Johnson', role: 'Production Manager', availability: { mon: true, tue: true, wed: true, thu: false, fri: true, sat: false, sun: false } },
+    { id: '3', name: 'Mike Davis', role: 'Print Specialist', availability: { mon: true, tue: true, wed: true, thu: true, fri: true, sat: true, sun: false } },
+  ])
+  const [selectedEngineer, setSelectedEngineer] = useState<string | null>(null)
+
+  const toggleDay = (engineerId: string, day: string) => {
+    setEngineers(engineers.map(e => {
+      if (e.id === engineerId) {
+        return { ...e, availability: { ...e.availability, [day]: !e.availability[day as keyof typeof e.availability] } }
+      }
+      return e
+    }))
+  }
+
+  const toggleAllDays = (engineerId: string, available: boolean) => {
+    setEngineers(engineers.map(e => {
+      if (e.id === engineerId) {
+        return { ...e, availability: { mon: available, tue: available, wed: available, thu: available, fri: available, sat: available, sun: available } }
+      }
+      return e
+    }))
+  }
+
+  const days = [
+    { key: 'mon', label: 'Mon' },
+    { key: 'tue', label: 'Tue' },
+    { key: 'wed', label: 'Wed' },
+    { key: 'thu', label: 'Thu' },
+    { key: 'fri', label: 'Fri' },
+    { key: 'sat', label: 'Sat' },
+    { key: 'sun', label: 'Sun' },
+  ]
+
   return (
     <div className="p-6 space-y-6">
       <div><h1 className="text-2xl font-bold">Settings</h1><p className="text-gray-500">Configure your CRM preferences</p></div>
+      
+      {/* Engineer Availability Section */}
+      <Card>
+        <CardHeader>
+          <div className="flex items-center justify-between">
+            <div>
+              <CardTitle>Staff Availability</CardTitle>
+              <CardDescription>Manage engineer availability for multiple days at once</CardDescription>
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-4">
+            {engineers.map((engineer) => (
+              <div key={engineer.id} className="p-4 border rounded-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <div>
+                    <h4 className="font-medium text-gray-900">{engineer.name}</h4>
+                    <p className="text-sm text-gray-500">{engineer.role}</p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => toggleAllDays(engineer.id, true)}
+                      className="text-green-600 border-green-200 hover:bg-green-50"
+                    >
+                      Set All Available
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      onClick={() => toggleAllDays(engineer.id, false)}
+                      className="text-red-600 border-red-200 hover:bg-red-50"
+                    >
+                      Set All Unavailable
+                    </Button>
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  {days.map((day) => (
+                    <button
+                      key={day.key}
+                      onClick={() => toggleDay(engineer.id, day.key)}
+                      className={`flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors ${
+                        engineer.availability[day.key as keyof typeof engineer.availability]
+                          ? 'bg-green-100 text-green-700 border-2 border-green-300'
+                          : 'bg-gray-100 text-gray-500 border-2 border-gray-200'
+                      }`}
+                    >
+                      {day.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            ))}
+            <Button className="bg-blue-600 hover:bg-blue-700">
+              Save Availability Changes
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
       <div className="grid gap-6">
         <Card><CardHeader><CardTitle>Company Profile</CardTitle><CardDescription>Your business information</CardDescription></CardHeader><CardContent className="space-y-4"><div className="grid md:grid-cols-2 gap-4"><div><Label>Company Name</Label><Input defaultValue="360 Print Works" /></div><div><Label>Email</Label><Input defaultValue="info@360printworks.com" /></div></div><div className="grid md:grid-cols-2 gap-4"><div><Label>Phone</Label><Input defaultValue="(555) 123-4567" /></div><div><Label>Website</Label><Input defaultValue="www.360printworks.com" /></div></div><div><Label>Address</Label><Input defaultValue="123 Print Street, Design City, DC 12345" /></div><Button className="bg-blue-600 hover:bg-blue-700">Save Changes</Button></CardContent></Card>
         <Card><CardHeader><CardTitle>Invoice Settings</CardTitle><CardDescription>Customize your invoice appearance</CardDescription></CardHeader><CardContent className="space-y-4"><div className="grid md:grid-cols-2 gap-4"><div><Label>Invoice Prefix</Label><Input defaultValue="INV-" /></div><div><Label>Next Invoice Number</Label><Input defaultValue="00008" /></div></div><div className="grid md:grid-cols-2 gap-4"><div><Label>Default Tax Rate (%)</Label><Input defaultValue="8" /></div><div><Label>Payment Terms (Days)</Label><Input defaultValue="30" /></div></div><div><Label>Invoice Footer Notes</Label><Textarea defaultValue="Thank you for your business! Payment is due within 30 days." /></div><Button className="bg-blue-600 hover:bg-blue-700">Save Changes</Button></CardContent></Card>
