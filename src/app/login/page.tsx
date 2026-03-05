@@ -31,7 +31,7 @@ export default function LoginPage() {
           title: "Welcome back!",
           description: "You've successfully logged in.",
         })
-        router.push('/crm')
+        router.push('/dashboard')
       } else {
         setError('Invalid email or password. Please try again.')
       }

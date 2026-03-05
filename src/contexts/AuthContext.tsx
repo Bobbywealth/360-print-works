@@ -86,17 +86,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.removeItem('360printworks_user')
   }, [])
 
-  // Mark as not loading after initial hydration
-  const markNotLoading = useCallback(() => {
-    setIsLoading(false)
-  }, [])
-  
-  // Use this to ensure isLoading is updated after hydration
-  if (isLoading && typeof window !== 'undefined') {
-    // Using queueMicrotask to defer state update outside of render
-    queueMicrotask(markNotLoading)
-  }
-
   return (
     <AuthContext.Provider value={{ user, login, logout, isLoading }}>
       {children}
