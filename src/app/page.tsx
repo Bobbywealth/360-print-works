@@ -277,7 +277,7 @@ function ServicesSection() {
               Get a Quote
               <ChevronRight className="ml-2 h-5 w-5" />
             </Button>
-            <Button size="lg" variant="outline" className="text-lg px-8">
+            <Button size="lg" variant="outline" className="text-lg px-8 border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900">
               Talk to a Specialist
             </Button>
           </div>
