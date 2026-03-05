@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -96,8 +97,8 @@ function Header() {
                     Login
                   </a>
                 </Button>
-                <Button className="bg-blue-600 hover:bg-blue-700">
-                  Get a Quote
+                <Button className="bg-blue-600 hover:bg-blue-700" asChild>
+                  <Link href="/quote">Get a Quote</Link>
                 </Button>
               </>
             )}
@@ -135,8 +136,8 @@ function Header() {
                     <Button variant="outline" asChild className="w-full justify-center">
                       <a href="/login">Login</a>
                     </Button>
-                    <Button className="bg-blue-600 hover:bg-blue-700 w-full">
-                      Get a Quote
+                    <Button className="bg-blue-600 hover:bg-blue-700 w-full" asChild>
+                      <Link href="/quote">Get a Quote</Link>
                     </Button>
                   </>
                 )}
@@ -190,9 +191,11 @@ function HeroSection() {
               From business cards to large format printing, we deliver premium quality prints with fast turnaround times. Your success is our priority.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-              <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8">
-                Get a Quote
-                <ChevronRight className="ml-2 h-5 w-5" />
+              <Button size="lg" className="bg-white text-blue-900 hover:bg-blue-50 text-lg px-8" asChild>
+                <Link href="/quote">
+                  Get a Quote
+                  <ChevronRight className="ml-2 h-5 w-5" />
+                </Link>
               </Button>
               <Button size="lg" variant="outline" className="text-white border-white hover:bg-white/10 text-lg px-8">
                 View Our Services
@@ -287,9 +290,11 @@ function ServicesSection() {
         <div className="mt-16 text-center">
           <p className="text-gray-600 mb-6 text-lg">Need help choosing the right print solution?</p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 h-14 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300">
-              Get a Quote
-              <ChevronRight className="ml-2 h-5 w-5" />
+            <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-lg px-8 h-14 rounded-xl shadow-lg shadow-blue-600/25 hover:shadow-xl hover:shadow-blue-600/30 transition-all duration-300" asChild>
+              <Link href="/quote">
+                Get a Quote
+                <ChevronRight className="ml-2 h-5 w-5" />
+              </Link>
             </Button>
             <Button size="lg" variant="outline" className="text-lg px-8 h-14 rounded-xl border-2 border-gray-200 hover:border-blue-300 hover:bg-blue-50 transition-all duration-300">
               Talk to a Specialist
