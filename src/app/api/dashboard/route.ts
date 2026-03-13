@@ -1,118 +1,41 @@
 import { NextResponse } from 'next/server'
-import { db } from '@/lib/db'
+import { DEMO_DASHBOARD, DEMO_LEADS, DEMO_CLIENTS, DEMO_PROJECTS, DEMO_INVOICES } from '../demo-data'
 
 export async function GET() {
-  try {
-    // Get counts
-    const [clientsCount, leadsCount, projectsCount, invoicesCount] = await Promise.all([
-      db.client.count(),
-      db.lead.count(),
-      db.project.count(),
-      db.invoice.count()
-    ])
-    
-    // Get active projects
-    const activeProjects = await db.project.count({
-      where: { status: 'In Progress' }
-    })
-    
-    // Get pending invoices
-    const pendingInvoices = await db.invoice.count({
-      where: { status: { in: ['Sent', 'Overdue'] } }
-    })
-    
-    // Calculate monthly revenue (paid invoices)
-    const startOfMonth = new Date()
-    startOfMonth.setDate(1)
-    startOfMonth.setHours(0, 0, 0, 0)
-    
-    const paidInvoices = await db.invoice.findMany({
-      where: {
-        status: 'Paid',
-        updatedAt: { gte: startOfMonth }
-      },
-      select: { total: true }
-    })
-    
-    const monthlyRevenue = paidInvoices.reduce((sum, inv) => sum + inv.total, 0)
-    
-    // Get total revenue
-    const allPaidInvoices = await db.invoice.findMany({
-      where: { status: 'Paid' },
-      select: { total: true }
-    })
-    const totalRevenue = allPaidInvoices.reduce((sum, inv) => sum + inv.total, 0)
-    
-    // Get recent activities
-    const activities = await db.activity.findMany({
-      take: 10,
-      orderBy: { createdAt: 'desc' },
-      include: {
-        lead: true,
-        client: true,
-        project: true
-      }
-    })
-    
-    // Get project status breakdown
-    const projectStatuses = await db.project.groupBy({
-      by: ['status'],
-      _count: true
-    })
-    
-    // Get invoice status breakdown
-    const invoiceStatuses = await db.invoice.groupBy({
-      by: ['status'],
-      _count: true,
-      _sum: { total: true }
-    })
-    
-    // Get monthly revenue for chart (last 6 months)
-    const monthlyData = []
-    for (let i = 5; i >= 0; i--) {
-      const date = new Date()
-      date.setMonth(date.getMonth() - i)
-      const monthStart = new Date(date.getFullYear(), date.getMonth(), 1)
-      const monthEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0, 23, 59, 59)
-      
-      const monthInvoices = await db.invoice.findMany({
-        where: {
-          status: 'Paid',
-          updatedAt: {
-            gte: monthStart,
-            lte: monthEnd
-          }
-        },
-        select: { total: true }
-      })
-      
-      const monthRevenue = monthInvoices.reduce((sum, inv) => sum + inv.total, 0)
-      monthlyData.push({
-        month: date.toLocaleString('default', { month: 'short' }),
-        revenue: monthRevenue
-      })
-    }
-    
-    return NextResponse.json({
-      counts: {
-        clients: clientsCount,
-        leads: leadsCount,
-        projects: projectsCount,
-        invoices: invoicesCount,
-        activeProjects,
-        pendingInvoices
-      },
-      revenue: {
-        monthly: monthlyRevenue,
-        total: totalRevenue
-      },
-      activities,
-      projectStatuses,
-      invoiceStatuses,
-      monthlyData
-    })
-  } catch (error) {
-    console.error(error)
-    return NextResponse.json({ error: 'Failed to fetch dashboard data' }, { status: 500 })
-  }
+  // Return demo data
+  return NextResponse.json({
+    counts: {
+      clients: DEMO_DASHBOARD.totalClients,
+      leads: DEMO_DASHBOARD.totalLeads,
+      projects: DEMO_DASHBOARD.totalProjects,
+      invoices: DEMO_INVOICES.length,
+      activeProjects: DEMO_PROJECTS.filter(p => p.status === 'In Progress').length,
+      pendingInvoices: DEMO_INVOICES.filter(i => i.status === 'Pending').length
+    },
+    revenue: {
+      monthly: DEMO_DASHBOARD.revenueThisMonth,
+      total: DEMO_DASHBOARD.totalRevenue
+    },
+    monthlyData: [
+      { month: 'Oct', revenue: 12000 },
+      { month: 'Nov', revenue: 15000 },
+      { month: 'Dec', revenue: 18000 },
+      { month: 'Jan', revenue: 14000 },
+      { month: 'Feb', revenue: 16000 },
+      { month: 'Mar', revenue: DEMO_DASHBOARD.revenueThisMonth },
+    ],
+    projectStatuses: [
+      { status: 'In Progress', _count: 8 },
+      { status: 'Completed', _count: 10 },
+    ],
+    invoiceStatuses: [
+      { status: 'Paid', _count: 15 },
+      { status: 'Pending', _count: 5 },
+    ],
+    recentActivities: [
+      { id: '1', type: 'Lead', action: 'Created', description: 'New lead: John Smith', createdAt: '2026-03-12T10:00:00Z' },
+      { id: '2', type: 'Project', action: 'Completed', description: 'Event Banners delivered', createdAt: '2026-03-11T15:00:00Z' },
+      { id: '3', type: 'Invoice', action: 'Created', description: 'INV-002 sent to Sarah Johnson', createdAt: '2026-03-10T09:00:00Z' },
+    ]
+  })
 }
