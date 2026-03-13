@@ -28,17 +28,21 @@ const DEMO_USER = {
 // Helper function to get initial user from localStorage (synchronous)
 function initializeUser(): { user: User | null; isLoading: boolean } {
   if (typeof window === 'undefined') {
-    return { user: null, isLoading: true }
+    return { user: null, isLoading: false }
   }
   
-  const savedUser = localStorage.getItem('360printworks_user')
-  if (savedUser) {
-    try {
-      return { user: JSON.parse(savedUser), isLoading: false }
-    } catch {
-      localStorage.removeItem('360printworks_user')
-      return { user: null, isLoading: false }
+  try {
+    const savedUser = localStorage.getItem('360printworks_user')
+    if (savedUser) {
+      try {
+        return { user: JSON.parse(savedUser), isLoading: false }
+      } catch {
+        localStorage.removeItem('360printworks_user')
+        return { user: null, isLoading: false }
+      }
     }
+  } catch (e) {
+    // localStorage not available
   }
   return { user: null, isLoading: false }
 }
